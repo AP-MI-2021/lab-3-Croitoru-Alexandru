@@ -30,6 +30,10 @@ def get_longest_alternating_signs(l):
         lst.append(l[i])
     return lst
 
+def test_get_longest_alternating_signs():
+    assert get_longest_alternating_signs([13, -5, 16, -3, 13, 16, 17]) == [13, -5, 16, -3, 13]
+test_get_longest_alternating_signs()
+
 """
 13. Toate numerele sunt formate din cifre prime.
 Funcția de calcul: get_longest_prime_digits(lst: list[int]) -> list[int]
@@ -43,6 +47,13 @@ def numere_prime(x):
             return False
     return True
 
+def test_numere_prime():
+    assert numere_prime(3) == True
+    assert numere_prime(7) == True
+    assert numere_prime(6) == False
+    assert numere_prime(10) == False
+test_numere_prime()
+
 def cifre_prime(x):
     while x > 0:
         if numere_prime(x % 10) == True:
@@ -50,6 +61,11 @@ def cifre_prime(x):
         else:
             return False
     return True
+
+def test_is_prime():
+    assert cifre_prime(33) == True
+    assert cifre_prime(57) == True
+test_is_prime()
 
 def get_longest_prime_digits(l):
     length = 0
@@ -67,6 +83,10 @@ def get_longest_prime_digits(l):
     for i in range( indexfinal - maxim + 1, indexfinal + 1, 1):
         lst.append(l[i])
     return lst
+
+def test_get_longest_prime_digits():
+    assert get_longest_prime_digits([55,37,25,46,48]) == [55,37,25]
+test_get_longest_prime_digits()
 
 """
 14. Toate numerele au partea întreagă egală cu partea fracționară.
@@ -103,6 +123,10 @@ def get_longest_equal_int_real(l):
     for i in range(finalindex - maxim + 1, finalindex + 1, 1):
         lst.append(l[i])
     return lst
+
+def test_get_longest_equal_int_real():
+    assert get_longest_equal_int_real([15.15, 16.16, 17.17, 18.20, 21.22]) == [15.15, 16.16, 17.17]
+test_get_longest_equal_int_real()
 
 def main():
     while True:
