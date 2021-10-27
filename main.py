@@ -1,149 +1,134 @@
-from math import *
+"""
+3. Numerele au semne alternante.
+Funcția de calcul: get_longest_alternating_signs(lst: list[int]) -> list[int]
+"""
 
-'''
-Determina daca un numar este antipalindrom
-'''
-def is_antipalindrome(n):
-    '''
-    :param n: nr intreg
-    :return: returneaza true daca este antipalindrom si false in caz contrar
-    '''
-    n = str(n)
-    lungime = len(n) - 1
-    i = 0
-    ok = 1
-    while i < lungime :
-        if n[i]==n[lungime]:
-            ok=0
-        i+=1
-        lungime-=1
-    if ok==0:
-        return False
-    else: return True
+def citire_lista():
+    l = []
+    p = input("Introduceti numerele separate prin ',': ")
+    numar = p.split(",")
+    for i in numar:
+        l.append(float(i))
+    return l
 
-'''
-calculeaza cel mai mare numar prim, aflat sub valoarea n
-'''
-def get_largest_prime_below(n):
-    '''
-    :param n: numar intreg
-    :return: Returneaza numarul prim
-    '''
-    for i in range(n-1, 1, -1):
-        ok=1
-        for j in range(2, int(sqrt(i))+1):
-            if i%j==0:
-                ok=0
-        if ok == 1:
-            return i
-
-'''
-transforma un numar din baza 10, in baza 2
-'''
-def get_base_2(n:str):
-    '''
-    :param n: numarul in baza 10, sub forma de string
-    :return: returneaza sub forma de string, numarul convertit in baza 2
-    '''
-    if n == '0':
-        return '0'
-    n = int(n)
+def get_longest_alternating_signs(l):
+    length = 1
+    maxim = 1
+    indexfinal = 0
     lst = []
-    s = ''
-    while n:
-        lst.append(n%2)
-        n = n // 2
-    for i in range(len(lst)-1, -1, -1):
-        s = s + str(lst[i])
-    return s
+    for i in range(0, len(l) - 1, 1):
+        numar1 = l[i]
+        numar2 = l[i+1]
+        if numar1 > 0 and numar2 < 0 or numar1 < 0 and numar2 > 0:
+            length = length + 1
+            if length > maxim:
+                maxim = length
+                indexfinal = i + 1
+        else:
+            length = 1
+    for i in range(indexfinal - maxim + 1, indexfinal + 1, 1):
+        lst.append(l[i])
+    return lst
 
-def test_get_largest_prime_below():
-    assert get_largest_prime_below(20) == 19
-    assert get_largest_prime_below(2) == None
-    assert get_largest_prime_below(16) == 13
+"""
+13. Toate numerele sunt formate din cifre prime.
+Funcția de calcul: get_longest_prime_digits(lst: list[int]) -> list[int]
+"""
 
-def test_get_base_2():
-    assert get_base_2('10') == '1010'
-    assert get_base_2('123') == '1111011'
-    assert get_base_2('16') == '10000'
-    assert get_base_2('0') == '0'
+def numere_prime(x):
+    if x < 2:
+        return False
+    for i in range(2, x // 2 + 1, 1):
+        if x % i == 0:
+            return False
+    return True
 
-def test_is_antipalindrome():
-    assert is_antipalindrome(232) is False
-    assert is_antipalindrome(10) is True
-    assert is_antipalindrome(2424) is True
-    assert is_antipalindrome(111) is False
+def cifre_prime(x):
+    while x > 0:
+        if numere_prime(x % 10) == True:
+            x = x // 10
+        else:
+            return False
+    return True
 
-test_is_antipalindrome()
-test_get_largest_prime_below()
-test_get_base_2()
+def get_longest_prime_digits(l):
+    length = 0
+    maxim = 0
+    indexfinal = 0
+    lst = []
+    for i in range(0, len(l), 1):
+        if cifre_prime(l[i]) == True:
+            length = length + 1
+            if length > maxim:
+                maxim = length
+                indexfinal = i
+        else:
+            length = 0
+    for i in range( indexfinal - maxim + 1, indexfinal + 1, 1):
+        lst.append(l[i])
+    return lst
 
-option = '''
-Daca doriti sa aflati cel mai mare numar prim, mai mic decat o valoare, scrieti "1".  
-Daca doriti sa transformati un numar din baza 10 in baza 2, scrieti "2". 
-Daca doriti sa aflati daca un numar este antipalindrom, scrieti "3".
-Daca doriti sa opriti programul, apasati ctrl + c, sau scrieti "4".
-'''
+"""
+14. Toate numerele au partea întreagă egală cu partea fracționară.
+Funcția de calcul: get_longest_equal_int_real(lst: list[float]) -> list[float]
+"""
+
+def numaram_cifre(n):
+    c = 0
+    while n > 0:
+        c = c + 1
+        n = n // 10
+    return c
+
+def get_longest_equal_int_real(l):
+    length = 0
+    maxim = 0
+    finalindex = 0
+    lst = []
+    for i in range(0, len(l), 1):
+        numar1 = int(l[i])
+        numar2 = l[i] - int(l[i])
+        c = numaram_cifre(numar1)
+        numar2 = numar2 * (10**c)
+        if numar1 == 0 and numar2 != 0:
+            length = 0
+            continue
+        if numar1 == int(numar2):
+            length = length + 1
+            if length > maxim:
+                maxim = length
+                finalindex = i
+        else:
+            length = 0
+    for i in range(finalindex - maxim + 1, finalindex + 1, 1):
+        lst.append(l[i])
+    return lst
 
 def main():
     while True:
-        optiune = input(option)
-        if optiune == '1':
-            numar = int(input("Scrieti valoarea:"))
-            print(f"Cel mai mare numar prim, mai mic decat {numar}, este: " + str(get_largest_prime_below(numar)))
-        elif optiune == '2':
-            numar = input("Scrieti numarul pe care doriti sa-l convertiti: ")
-            print(f"Numarul {numar} convertit in baza 2 este: " + get_base_2(numar))
-        elif optiune == '3':
-            numar = int(input("Scrieti numarul dumneavoastra: "))
-            if is_antipalindrome(numar) == False:
-                print(f"Numarul {numar} nu este antipalindrom.")
-            else: print(f"Numarul {numar} este antipalindrom.")
-        elif optiune == '4':
-            print("Programul a fost oprit!")
+        print(" Daca doriti sa introduceti o lista de numere, apasati tasta 1 ")
+        print(" Daca doriti sa va afiseze lista de numere, apasati tasta 2 ")
+        print(" Daca doriti sa stiti subsecventa maxima de numere alternante, apasati tasta 3")
+        print(" Daca doriti sa aflati subsecventa maxima de numere care detin toate cifrele prime, apasati tasta 4")
+        print(" Aflati daca numarul dumneavoastra are partea intreaga cu partea fractionara, apasati tasta 5 ")
+        print(" Pentru oprirea programului, apasati tasta x ")
+
+        optiune = input("Scrieti optiunea dorita: ")
+
+        if optiune == "1":
+            lista = citire_lista()
+        elif optiune == "2":
+            print("Lista dumneavoastra este: ", lista)
+        elif optiune == "3":
+            print(get_longest_alternating_signs(lista))
+        elif optiune == "4":
+            print(get_longest_prime_digits(lista))
+        elif optiune == "5":
+            print(get_longest_equal_int_real(lista))
+        elif optiune == "x":
             break
-        else: print("Comanda neexistenta.")
-
-if __name__ == '__main__':
-  main()
-
-
-  def get_longest_alternating_sign(lst: list[int]):
-      l = []
-      l_temp = []
-      for i in range(0, len(lst) - 1):
-          numar1 = lst[i]
-          numar2 = lst[i + 1]
-          if numar1 * numar2 > 0:
-              l_temp.append(numar1)
-              if len(l_temp) > len(l):
-                  l = l_temp
-              l_temp = []
-          if numar1 * numar2 < 0:
-              l_temp.append(numar1)
-      return l
+        else:
+            print("Optiunea dorita nu este existenta, introduceti o valoare valida!")
+main()
 
 
-  ceva = get_longest_alternating_sign([5, 7, -5, 9, -15, 15, 13, -20])
-  print(ceva)
-
-
-def get_longest_alternating_sign(lst: list[int]):
-    l = []
-    l_temp = []
-    for i in range(0, len(lst) -1):
-        numar1 = lst[i]
-        numar2 = lst[i+1]
-        if numar1*numar2 > 0:
-            l_temp.append(numar1)
-            if len(l_temp) > len(l):
-                l = l_temp
-            l_temp = []
-        if numar1*numar2 < 0:
-            l_temp.append(numar1)
-    return l
-
-
-
-ceva = get_longest_alternating_sign([5,7,-5,9,-15,15,13,-20])
-print(ceva)
